@@ -1,45 +1,99 @@
 'use client';
 
-import React from 'react';
-import { getEmployees, getEmployeeProjects, getEmployeeMeetings } from '@/lib/utils';
-import { Employee } from '@/types';
-import { Users, Mail, Briefcase, Calendar, TrendingUp } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Users, Mail, Briefcase, Phone, Plus } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import CreateEmployeeModal from './CreateEmployeeModal';
 
-const getWorkloadColor = (workload: number) => {
-  if (workload >= 85) return 'bg-red-500';
-  if (workload >= 70) return 'bg-orange-500';
-  if (workload >= 50) return 'bg-yellow-500';
-  return 'bg-green-500';
-};
-
-const getWorkloadLabel = (workload: number) => {
-  if (workload >= 85) return 'Високе навантаження';
-  if (workload >= 70) return 'Помірне навантаження';
-  if (workload >= 50) return 'Нормальне навантаження';
-  return 'Низьке навантаження';
-};
+interface User {
+  id: number;
+  email: string;
+  name: string;
+  role: string;
+  position?: string;
+  department?: string;
+  phone?: string;
+  active: boolean;
+}
 
 export default function EmployeesList() {
-  const employees = getEmployees();
+  const [employees, setEmployees] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  const fetchEmployees = async () => {
+    try {
+      const response = await fetch('/api/employees');
+      if (response.ok) {
+        const data = await response.json();
+        setEmployees(data);
+      }
+    } catch (error) {
+      console.error('Error fetching employees:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Групування працівників за відділами
   const employeesByDepartment = employees.reduce((acc, emp) => {
-    if (!acc[emp.department]) {
-      acc[emp.department] = [];
+    const dept = emp.department || 'Без відділу';
+    if (!acc[dept]) {
+      acc[dept] = [];
     }
-    acc[emp.department].push(emp);
+    acc[dept].push(emp);
     return acc;
-  }, {} as Record<string, Employee[]>);
+  }, {} as Record<string, User[]>);
 
-  const averageWorkload = Math.round(
-    employees.reduce((sum, emp) => sum + emp.workload, 0) / employees.length
-  );
+  const roleLabels: Record<string, string> = {
+    admin: 'Адміністратор',
+    manager: 'Менеджер',
+    employee: 'Працівник',
+  };
+
+  const roleColors: Record<string, string> = {
+    admin: 'bg-red-100 text-red-800',
+    manager: 'bg-blue-100 text-blue-800',
+    employee: 'bg-green-100 text-green-800',
+  };
+
+  if (loading) {
+    return (
+      <div>
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Працівники</h1>
+          <p className="text-gray-600 mt-2">Перегляд команди</p>
+        </div>
+        <div className="animate-pulse space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-32 bg-gray-200 rounded-lg"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Працівники</h1>
-        <p className="text-gray-600 mt-2">Перегляд команди та завантаження працівників</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Працівники</h1>
+          <p className="text-gray-600 mt-2">Перегляд команди та управління працівниками</p>
+        </div>
+        {(session?.user.role === 'admin' || session?.user.role === 'manager') && (
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-5 h-5" />
+            Додати працівника
+          </button>
+        )}
       </div>
 
       {/* Статистика */}
@@ -73,11 +127,13 @@ export default function EmployeesList() {
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-purple-100 rounded-lg">
-              <TrendingUp className="w-6 h-6 text-purple-600" />
+              <Users className="w-6 h-6 text-purple-600" />
             </div>
             <div>
-              <p className="text-gray-600 text-sm">Середнє навантаження</p>
-              <p className="text-2xl font-bold text-gray-900">{averageWorkload}%</p>
+              <p className="text-gray-600 text-sm">Активних</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {employees.filter((e) => e.active).length}
+              </p>
             </div>
           </div>
         </div>
@@ -95,74 +151,73 @@ export default function EmployeesList() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {departmentEmployees.map((employee) => {
-              const projects = getEmployeeProjects(employee.id);
-              const meetings = getEmployeeMeetings(employee.id);
-
-              return (
-                <div
-                  key={employee.id}
-                  className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
-                >
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-lg font-semibold flex-shrink-0">
-                      {employee.name.split(' ').map(n => n[0]).join('')}
+            {departmentEmployees.map((employee) => (
+              <div
+                key={employee.id}
+                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-lg font-semibold">
+                      {employee.name
+                        .split(' ')
+                        .map((n) => n[0])
+                        .join('')}
                     </div>
-
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
-                        {employee.name}
-                      </h3>
-                      <p className="text-sm text-gray-600">{employee.role}</p>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{employee.name}</h3>
+                      <p className="text-sm text-gray-600">{employee.position || 'Посада не вказана'}</p>
                     </div>
-                  </div>
-
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Mail className="w-4 h-4" />
-                      <span className="truncate">{employee.email}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <Briefcase className="w-4 h-4" />
-                        <span>{projects.length} проектів</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <Calendar className="w-4 h-4" />
-                        <span>{meetings.length} зустрічей</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Індикатор завантаження */}
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">
-                        Завантаження
-                      </span>
-                      <span className="text-sm font-semibold text-gray-900">
-                        {employee.workload}%
-                      </span>
-                    </div>
-
-                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                      <div
-                        className={`h-full transition-all ${getWorkloadColor(employee.workload)}`}
-                        style={{ width: `${employee.workload}%` }}
-                      />
-                    </div>
-
-                    <p className="text-xs text-gray-500 mt-1">
-                      {getWorkloadLabel(employee.workload)}
-                    </p>
                   </div>
                 </div>
-              );
-            })}
+
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Mail className="w-4 h-4" />
+                    <span className="truncate">{employee.email}</span>
+                  </div>
+
+                  {employee.phone && (
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Phone className="w-4 h-4" />
+                      <span>{employee.phone}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex gap-2">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      roleColors[employee.role] || 'bg-gray-100 text-gray-800'
+                    }`}
+                  >
+                    {roleLabels[employee.role] || employee.role}
+                  </span>
+                  {!employee.active && (
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                      Неактивний
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+
+      <CreateEmployeeModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onEmployeeCreated={fetchEmployees}
+      />
           </div>
         </div>
       ))}
+
+      {employees.length === 0 && (
+        <div className="text-center py-12 bg-white rounded-lg shadow-sm">
+          <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Немає працівників</h3>
+          <p className="text-gray-600">Працівники з'являться тут після додавання</p>
+        </div>
+      )}
     </div>
   );
 }
