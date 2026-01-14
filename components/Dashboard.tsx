@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { getProjects, getMeetings, getEmployees, getInvitations } from '@/lib/utils';
 import { Calendar, FolderKanban, Users, Mail, TrendingUp, Clock } from 'lucide-react';
 import Link from 'next/link';

@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { getInvitations, getEmployeeById, getProjectById, getMeetingById, formatDateTime } from '@/lib/utils';
 import { Invitation } from '@/types';
 import { Mail, UserPlus, Calendar, CheckCircle, XCircle, Clock } from 'lucide-react';

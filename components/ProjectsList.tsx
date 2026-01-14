@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { getProjects, getProjectMembers, formatDate } from '@/lib/utils';
 import { Project } from '@/types';
 import { FolderKanban, Calendar, Users, AlertCircle } from 'lucide-react';

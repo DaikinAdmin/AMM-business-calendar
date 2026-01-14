@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { getEmployees, getEmployeeProjects, getEmployeeMeetings } from '@/lib/utils';
 import { Employee } from '@/types';
 import { Users, Mail, Briefcase, Calendar, TrendingUp } from 'lucide-react';

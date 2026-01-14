@@ -1,9 +1,9 @@
 'use client';
 
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import React, { useState, useMemo } from 'react';
+import { Calendar, momentLocalizer, View } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/uk';
-import { useState, useMemo } from 'react';
 import { getMeetings, getProjects } from '@/lib/utils';
 import { CalendarEvent } from '@/types';
 
@@ -11,7 +11,7 @@ moment.locale('uk');
 const localizer = momentLocalizer(moment);
 
 export default function CalendarView() {
-  const [view, setView] = useState<'month' | 'week' | 'day' | 'agenda'>('month');
+  const [view, setView] = useState<View>('month');
   const [date, setDate] = useState(new Date());
 
   const events = useMemo(() => {
@@ -69,7 +69,7 @@ export default function CalendarView() {
             time: 'Час',
             event: 'Подія',
             noEventsInRange: 'Немає подій у цьому діапазоні.',
-            showMore: (total) => `+${total} ще`,
+            showMore: (total: number) => `+${total} ще`,
           }}
           popup
           selectable
