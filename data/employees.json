@@ -1,0 +1,66 @@
+[
+  {
+    "id": "emp-1",
+    "name": "Олександр Коваленко",
+    "email": "o.kovalenko@company.com",
+    "role": "Project Manager",
+    "department": "Management",
+    "workload": 75
+  },
+  {
+    "id": "emp-2",
+    "name": "Марія Шевченко",
+    "email": "m.shevchenko@company.com",
+    "role": "Senior Developer",
+    "department": "Development",
+    "workload": 85
+  },
+  {
+    "id": "emp-3",
+    "name": "Іван Петренко",
+    "email": "i.petrenko@company.com",
+    "role": "UI/UX Designer",
+    "department": "Design",
+    "workload": 60
+  },
+  {
+    "id": "emp-4",
+    "name": "Анна Мельник",
+    "email": "a.melnyk@company.com",
+    "role": "Backend Developer",
+    "department": "Development",
+    "workload": 90
+  },
+  {
+    "id": "emp-5",
+    "name": "Дмитро Бойко",
+    "email": "d.boyko@company.com",
+    "role": "QA Engineer",
+    "department": "Quality Assurance",
+    "workload": 50
+  },
+  {
+    "id": "emp-6",
+    "name": "Катерина Лисенко",
+    "email": "k.lysenko@company.com",
+    "role": "Frontend Developer",
+    "department": "Development",
+    "workload": 70
+  },
+  {
+    "id": "emp-7",
+    "name": "Сергій Ткаченко",
+    "email": "s.tkachenko@company.com",
+    "role": "DevOps Engineer",
+    "department": "Operations",
+    "workload": 65
+  },
+  {
+    "id": "emp-8",
+    "name": "Ольга Морозова",
+    "email": "o.morozova@company.com",
+    "role": "Business Analyst",
+    "department": "Analytics",
+    "workload": 55
+  }
+]

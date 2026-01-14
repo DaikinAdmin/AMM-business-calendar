@@ -1,0 +1,96 @@
+[
+  {
+    "id": "meet-1",
+    "title": "Планування спринту",
+    "description": "Обговорення завдань на наступний спринт",
+    "start": "2026-01-15T10:00:00.000Z",
+    "end": "2026-01-15T11:30:00.000Z",
+    "attendees": ["emp-1", "emp-2", "emp-4", "emp-6"],
+    "projectId": "proj-1",
+    "location": "Конференц-зал А",
+    "type": "meeting",
+    "color": "#3b82f6"
+  },
+  {
+    "id": "meet-2",
+    "title": "Дейлі стендап",
+    "description": "Щоденна синхронізація команди",
+    "start": "2026-01-16T09:30:00.000Z",
+    "end": "2026-01-16T09:45:00.000Z",
+    "attendees": ["emp-1", "emp-2", "emp-4", "emp-5", "emp-6"],
+    "projectId": "proj-2",
+    "location": "Online (Zoom)",
+    "type": "meeting",
+    "color": "#10b981"
+  },
+  {
+    "id": "meet-3",
+    "title": "Презентація для клієнта",
+    "description": "Демонстрація прогресу редизайну сайту",
+    "start": "2026-01-17T14:00:00.000Z",
+    "end": "2026-01-17T15:30:00.000Z",
+    "attendees": ["emp-1", "emp-3", "emp-6"],
+    "projectId": "proj-1",
+    "location": "Конференц-зал B",
+    "type": "event",
+    "color": "#3b82f6"
+  },
+  {
+    "id": "meet-4",
+    "title": "Ревю коду",
+    "description": "Перегляд та обговорення нового коду",
+    "start": "2026-01-18T11:00:00.000Z",
+    "end": "2026-01-18T12:00:00.000Z",
+    "attendees": ["emp-2", "emp-4", "emp-6"],
+    "projectId": "proj-2",
+    "location": "Online (Teams)",
+    "type": "meeting",
+    "color": "#10b981"
+  },
+  {
+    "id": "meet-5",
+    "title": "Дедлайн MVP",
+    "description": "Здача мінімально життєздатного продукту",
+    "start": "2026-01-20T17:00:00.000Z",
+    "end": "2026-01-20T17:30:00.000Z",
+    "attendees": ["emp-1", "emp-2", "emp-4", "emp-5"],
+    "projectId": "proj-2",
+    "type": "deadline",
+    "color": "#ef4444"
+  },
+  {
+    "id": "meet-6",
+    "title": "Воркшоп з UX дизайну",
+    "description": "Навчальний семінар з користувацького досвіду",
+    "start": "2026-01-21T13:00:00.000Z",
+    "end": "2026-01-21T16:00:00.000Z",
+    "attendees": ["emp-3", "emp-6", "emp-1"],
+    "location": "Конференц-зал С",
+    "type": "event",
+    "color": "#a855f7"
+  },
+  {
+    "id": "meet-7",
+    "title": "Ретроспектива спринту",
+    "description": "Аналіз завершеного спринту",
+    "start": "2026-01-22T15:00:00.000Z",
+    "end": "2026-01-22T16:30:00.000Z",
+    "attendees": ["emp-1", "emp-2", "emp-4", "emp-5", "emp-6"],
+    "projectId": "proj-1",
+    "location": "Конференц-зал А",
+    "type": "meeting",
+    "color": "#3b82f6"
+  },
+  {
+    "id": "meet-8",
+    "title": "Зустріч з DevOps",
+    "description": "Обговорення CI/CD pipeline",
+    "start": "2026-01-23T10:00:00.000Z",
+    "end": "2026-01-23T11:00:00.000Z",
+    "attendees": ["emp-7", "emp-2", "emp-4"],
+    "projectId": "proj-5",
+    "location": "Online (Zoom)",
+    "type": "meeting",
+    "color": "#ec4899"
+  }
+]
